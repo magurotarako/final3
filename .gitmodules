@@ -1,0 +1,3 @@
+[submodule "pi/cps"]
+	path = pi/cps
+	url = https://github.com/kaityo256/cps.git
