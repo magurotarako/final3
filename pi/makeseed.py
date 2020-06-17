@@ -1,4 +1,4 @@
-N = 20
+N = 19
 
 for i in range(N):
     filename = "seed{:02d}.dat".format(i)
