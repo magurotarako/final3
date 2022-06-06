@@ -12,5 +12,5 @@ for _ in range(N):
     if x**2 + y**2 < 1.0:
         s = s + 1
 
-pi = float(s / N * 4.0)
+pi = float(s)/N*4.0
 print(pi)
