@@ -4,7 +4,7 @@ for i in range(N):
     filename = "seed{:02d}.dat".format(i)
     print(filename)
     with open(filename, "w") as f:
-        f.write(str(i))
+        f.write(str(i)+"\n")
 
 with open("task.sh", "w") as f:
     print("task.sh")
