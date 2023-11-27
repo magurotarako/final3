@@ -333,7 +333,7 @@ def make_win_rate(mode, times, reason_list):
 #mode = random.randint(0, 1)
 #mode = 0 なら学習AIが先手、mode = 1 ならランダムAIが先手
 
-times = 1 #試合数
+times = 10000 #試合数
 
 #"学習AIが先手の場合の勝率:"
 mode = 0
