@@ -21,7 +21,7 @@ for i in range(number):
 
 N = number
 
-with open("job.sh", "w") as f:
+with open("task.sh", "w") as f:
     for i in range(N):
         filename = "makeLogsFromSeed.py seed{:02d}_alpha{}_match{}_border{}.yml".format(i + 1, alpha, match, border)
         #result = "result{:02d}.dat".format(i)
