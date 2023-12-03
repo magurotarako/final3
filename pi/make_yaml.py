@@ -16,16 +16,16 @@ for i in range(number):
     seed_yaml = {'seed':i + 1, 'alpha':alpha, 'match':match, 'border':border}
     # data output to yaml
     output = dump(seed_yaml, Dumper=Dumper)
-    with open("seed{:02d}_alpha{}_match{}_border{}.yml".format(i + 1, alpha, match, border), 'w') as yml:
+    with open("seed{:03d}_alpha{}_match{}_border{}.yml".format(i + 1, alpha, match, border), 'w') as yml:
         yml.write(output)
 
 N = number
 
 with open("task.sh", "w") as f:
     for i in range(N):
-        filename = "makeLogsFromSeed.py seed{:02d}_alpha{}_match{}_border{}.yml".format(i + 1, alpha, match, border)
+        script = "makeLogsFromSeed.py seed{:03d}_alpha{}_match{}_border{}.yml".format(i + 1, alpha, match, border)
         #result = "result{:02d}.dat".format(i)
-        f.write("python3 {}\n".format(filename))
+        f.write("python3 {}\n".format(script))
 
 print("You made some files.")
 print("task.sh and seed{1~number}_alpha{1}_match{2}_border{3}.yml was made in this directory.")

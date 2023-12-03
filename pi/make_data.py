@@ -21,7 +21,7 @@ def get_outputs(number, alpha, match, border):
     for i in range(number):
         #print(i)
         #print("output_seed{0}_alpha{1}_match{2}_border{3}.pkl".format(i + 1, alpha, match, border))
-        with open("output_seed{0}_alpha{1}_match{2}_border{3}.pkl".format(i + 1, alpha, match, border), 'rb') as tf:
+        with open("output_seed{:03d}_alpha{1}_match{2}_border{3}.pkl".format(i + 1, alpha, match, border), 'rb') as tf:
             output = pickle.load(tf)
             #print(output)
             for key, value in output.items():
