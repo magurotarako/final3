@@ -47,6 +47,6 @@ number, alpha, match, border, fBorder = get_params()
 data = get_outputs(number, alpha, match, border)
 final_data = make_data(data, fBorder)
 #print(final_data)
-with open("data_seed1to{0}_alpha{1}_match{2}_border{3}_fBorder{4}.pkl".format(number, alpha, match, border, fBorder), 'wb') as tf:
+with open("data_seed1to{:03d}_alpha{1}_match{2}_border{3}_fBorder{4}.pkl".format(number, alpha, match, border, fBorder), 'wb') as tf:
     pickle.dump(final_data, tf)
 

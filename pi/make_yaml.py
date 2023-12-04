@@ -24,7 +24,7 @@ N = number
 with open("task.sh", "w") as f:
     for i in range(N):
         script = "makeLogsFromSeed.py seed{:03d}_alpha{}_match{}_border{}.yml".format(i + 1, alpha, match, border)
-        #result = "result{:02d}.dat".format(i)
+        #result = "result{:03d}.dat".format(i)
         f.write("python3 {}\n".format(script))
 
 print("You made some files.")
