@@ -383,7 +383,6 @@ alpha = 0.99
 match = 5
 border = 2
 '''
-print("output_seed{:03d}_alpha{1}_match{2}_border{3}.pkl".format(seed, alpha, match, border))
 
 random.seed(seed)
 turns, reasons, logs = game_play(match)
