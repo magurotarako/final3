@@ -74,40 +74,40 @@ def find_myghosts(board):
     return myghosts
 
 def move(myghosts, board):
-  next_board_list, arrow_list = [], []
-  for ghost in myghosts:
-    i, j = ghost
-    for k in range(4):
-      next_board = np.copy(board)
-      if k == 0:
-        can = move_up(ghost, myghosts, board)
-        if can == True:
-          next_board[i - 1][j] = next_board[i][j]
-          next_board[i][j] = 0
-          arrow_list.append([i, j, i - 1, j])
-          next_board_list.append(next_board)
-      elif k == 1:
-        can = move_down(ghost, myghosts)
-        if can == True:
-          next_board[i + 1][j] = next_board[i][j]
-          next_board[i][j] = 0
-          arrow_list.append([i, j, i + 1, j])
-          next_board_list.append(next_board)
-      elif k == 2:
-        can = move_left(ghost, myghosts)
-        if can == True:
-          next_board[i][j - 1] = next_board[i][j]
-          next_board[i][j] = 0
-          arrow_list.append([i, j, i, j - 1])
-          next_board_list.append(next_board)
-      else:
-        can = move_right(ghost, myghosts)
-        if can == True:
-          next_board[i][j + 1] = next_board[i][j]
-          next_board[i][j] = 0
-          arrow_list.append([i, j, i, j + 1])
-          next_board_list.append(next_board)
-  return next_board_list, arrow_list
+    next_board_list, arrow_list = [], []
+    for ghost in myghosts:
+        i, j = ghost
+        for k in range(4):
+        next_board = np.copy(board)
+        if k == 0:
+            can = move_up(ghost, myghosts, board)
+            if can == True:
+                next_board[i - 1][j] = next_board[i][j]
+                next_board[i][j] = 0
+                arrow_list.append([i, j, i - 1, j])
+                next_board_list.append(next_board)
+        elif k == 1:
+            can = move_down(ghost, myghosts)
+            if can == True:
+                next_board[i + 1][j] = next_board[i][j]
+                next_board[i][j] = 0
+                arrow_list.append([i, j, i + 1, j])
+                next_board_list.append(next_board)
+        elif k == 2:
+            can = move_left(ghost, myghosts)
+            if can == True:
+                next_board[i][j - 1] = next_board[i][j]
+                next_board[i][j] = 0
+                arrow_list.append([i, j, i, j - 1])
+                next_board_list.append(next_board)
+        else:
+            can = move_right(ghost, myghosts)
+            if can == True:
+            next_board[i][j + 1] = next_board[i][j]
+            next_board[i][j] = 0
+            arrow_list.append([i, j, i, j + 1])
+            next_board_list.append(next_board)
+    return next_board_list, arrow_list
 
 def move_up(ghost, myghosts, board):
     i, j = ghost
@@ -163,108 +163,111 @@ def reverse_arrow(arrow):
 
 
 def game_play(times):
-  turn_list, reason_list, log_list = [], [], []
-  for _ in range(times):
-    log = []
-    board = make_board()
-    #make_png(board, 0, 0, [])
-    log.append(board)
-    turn = 1
-    while True:
-      if turn % 2 == 1: #自分のターン
-        if board[0][0] == 1:
-          #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で勝ち）
-          #board[0][0] = 0
-          reason = 3
-          #make_png(next_board, reason, turn, [0, 0, 0, -1])
-          turn_list.append(turn - 1)
-          reason_list.append(reason)
-          log_list.append(log)
-          break
-        elif board[0][5] == 1:
-          #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で勝ち）
-          #board[0][5] = 0
-          reason = 3
-          #make_png(board, reason, turn, [0, 5, 0, 6])
-          turn_list.append(turn - 1)
-          reason_list.append(reason)
-          log_list.append(log)
-          break
-        next_board_list, arrow_list = make_my_next_board_list(board)
-        next_board, arrow = choice_board(next_board_list, arrow_list)
-        log.append(next_board)
-        if count_ghosts(next_board) == 1:
-          #この時点でのnext_board = 決着ボード（「自分のターン終了時にこの盤面」で勝ち）
-          reason = 1
-          #make_png(next_board, reason, turn, arrow)
-          turn_list.append(turn)
-          reason_list.append(reason)
-          log_list.append(log)
-          break
-        elif count_ghosts(next_board) == 2:
-          #この時点でのnext_board = 決着ボード（「自分のターン終了時にこの盤面」で負け）
-          reason = 2
-          #make_png(next_board, reason, turn, arrow)
-          turn_list.append(turn)
-          reason_list.append(reason)
-          log_list.append(log)
-          break
-        else:
-          #make_png(next_board, 0, turn, arrow)
-          board = turn_switch(next_board)
-          turn += 1
-      else: #相手のターン
-        if board[0][0] == 1:
-          board = turn_switch(board)
-          #この時点でのboard = 決着ボード（「自分のターン終了時にこの盤面」で負け）
-          #board[5][5] = 0
-          reason = 6
-          #make_png(board, reason, turn, [5, 5, 5, 6])
-          turn_list.append(turn - 1)
-          reason_list.append(reason)
-          log_list.append(log)
-          break
-        elif board[0][5] == 1:
-          board = turn_switch(board)
-          #この時点でのboard = 決着ボード（「自分のターン終了時にこの盤面」で負け）
-          #board[5][0] = 0
-          reason = 6
-          #make_png(board, reason, turn, [5, 0, 5, -1])
-          turn_list.append(turn - 1)
-          reason_list.append(reason)
-          log_list.append(log)
-          break
-        next_board_list, arrow_list = make_my_next_board_list(board)
-        next_board, arrow = choice_board(next_board_list, arrow_list)
-        if count_ghosts(next_board) == 1:
-          board = turn_switch(next_board)
-          #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で負け）
-          log.append(board)
-          #arrow = reverse_arrow(arrow)
-          reason = 4
-          #make_png(board, reason, turn, arrow)
-          turn_list.append(turn)
-          reason_list.append(reason)
-          log_list.append(log)
-          break
-        elif count_ghosts(next_board) == 2:
-          board = turn_switch(next_board)
-          #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で勝ち）
-          log.append(board)
-          #arrow = reverse_arrow(arrow)
-          reason = 5
-          #make_png(board, reason, turn, arrow)
-          turn_list.append(turn)
-          reason_list.append(reason)
-          log_list.append(log)
-          break
-        else:
-          board = turn_switch(next_board)
-          log.append(board)
-          #arrow = reverse_arrow(arrow)
-          #make_png(board, 0, turn, arrow)
-          turn += 1
-  return turn_list, reason_list, log_list
+    turn_list, reason_list, log_list = [], [], []
+    for _ in range(times):
+        log = []
+        board = make_board()
+        #make_png(board, 0, 0, [])
+        log.append(board)
+        turn = 1
+        while True:
+            if turn % 2 == 1: #自分のターン
+                if board[0][0] == 1:
+                    #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で勝ち）
+                    #board[0][0] = 0
+                    reason = 3
+                    #make_png(next_board, reason, turn, [0, 0, 0, -1])
+                    turn_list.append(turn - 1)
+                    reason_list.append(reason)
+                    log_list.append(log)
+                    break
+                elif board[0][5] == 1:
+                    #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で勝ち）
+                    #board[0][5] = 0
+                    reason = 3
+                    #make_png(board, reason, turn, [0, 5, 0, 6])
+                    turn_list.append(turn - 1)
+                    reason_list.append(reason)
+                    log_list.append(log)
+                    break
+
+                next_board_list, arrow_list = make_my_next_board_list(board)
+                next_board, arrow = choice_board(next_board_list, arrow_list)
+                log.append(next_board)
+                if count_ghosts(next_board) == 1:
+                    #この時点でのnext_board = 決着ボード（「自分のターン終了時にこの盤面」で勝ち）
+                    reason = 1
+                    #make_png(next_board, reason, turn, arrow)
+                    turn_list.append(turn)
+                    reason_list.append(reason)
+                    log_list.append(log)
+                    break
+                elif count_ghosts(next_board) == 2:
+                    #この時点でのnext_board = 決着ボード（「自分のターン終了時にこの盤面」で負け）
+                    reason = 2
+                    #make_png(next_board, reason, turn, arrow)
+                    turn_list.append(turn)
+                    reason_list.append(reason)
+                    log_list.append(log)
+                    break
+                else:
+                    #make_png(next_board, 0, turn, arrow)
+                    board = turn_switch(next_board)
+                    turn += 1
+                    
+            else: #相手のターン
+                if board[0][0] == 1:
+                    board = turn_switch(board)
+                    #この時点でのboard = 決着ボード（「自分のターン終了時にこの盤面」で負け）
+                    #board[5][5] = 0
+                    reason = 6
+                    #make_png(board, reason, turn, [5, 5, 5, 6])
+                    turn_list.append(turn - 1)
+                    reason_list.append(reason)
+                    log_list.append(log)
+                    break
+                elif board[0][5] == 1:
+                    board = turn_switch(board)
+                    #この時点でのboard = 決着ボード（「自分のターン終了時にこの盤面」で負け）
+                    #board[5][0] = 0
+                    reason = 6
+                    #make_png(board, reason, turn, [5, 0, 5, -1])
+                    turn_list.append(turn - 1)
+                    reason_list.append(reason)
+                    log_list.append(log)
+                    break
+
+                next_board_list, arrow_list = make_my_next_board_list(board)
+                next_board, arrow = choice_board(next_board_list, arrow_list)
+                if count_ghosts(next_board) == 1:
+                    board = turn_switch(next_board)
+                    #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で負け）
+                    log.append(board)
+                    #arrow = reverse_arrow(arrow)
+                    reason = 4
+                    #make_png(board, reason, turn, arrow)
+                    turn_list.append(turn)
+                    reason_list.append(reason)
+                    log_list.append(log)
+                    break
+                elif count_ghosts(next_board) == 2:
+                    board = turn_switch(next_board)
+                    #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で勝ち）
+                    log.append(board)
+                    #arrow = reverse_arrow(arrow)
+                    reason = 5
+                    #make_png(board, reason, turn, arrow)
+                    turn_list.append(turn)
+                    reason_list.append(reason)
+                    log_list.append(log)
+                    break
+                else:
+                    board = turn_switch(next_board)
+                    log.append(board)
+                    #arrow = reverse_arrow(arrow)
+                    #make_png(board, 0, turn, arrow)
+                    turn += 1
+    return turn_list, reason_list, log_list
 
 
 def make_one_hot(board):
@@ -305,41 +308,41 @@ def make_output(turns, reasons, logs, alpha, match):
         switch_log = make_switch_log(log)
 
         if reason % 2 == 1: 
-        #奇数なら先手が勝ち≒最後の盤面は先手にとって良い盤面（評価値1）
-        start = 1
-        #最後の盤面は後手にとって悪い盤面（評価値-1）
-        switch_start = -1
+            #奇数なら先手が勝ち≒最後の盤面は先手にとって良い盤面（評価値1）
+            start = 1
+            #最後の盤面は後手にとって悪い盤面（評価値-1）
+            switch_start = -1
         else: 
-        #偶数なら後手が勝ち≒最後の盤面は先手にとって悪い盤面（評価値-1）
-        start = -1
-        #最後の盤面は後手にとって良い盤面（評価値1）
-        switch_start = 1
+            #偶数なら後手が勝ち≒最後の盤面は先手にとって悪い盤面（評価値-1）
+            start = -1
+            #最後の盤面は後手にとって良い盤面（評価値1）
+            switch_start = 1
         
         #先手視点でoutput作成
         for j in range(turn + 1):
-        point = start * (alpha ** j)
-        m = (j + 1) * (-1)
-        one_hot = make_one_hot(log[m])
-        if one_hot not in output_log:
-            output_log[one_hot] = [1, point]
-        else:
-            value = output_log[one_hot]
-            value[0] += 1
-            value[1] += point
-            output_log[one_hot] = [value[0], value[1]]
+            point = start * (alpha ** j)
+            m = (j + 1) * (-1)
+            one_hot = make_one_hot(log[m])
+            if one_hot not in output_log:
+                output_log[one_hot] = [1, point]
+            else:
+                value = output_log[one_hot]
+                value[0] += 1
+                value[1] += point
+                output_log[one_hot] = [value[0], value[1]]
 
         #後手視点でoutput作成
         for k in range(turn + 1):
-        point = switch_start * (alpha ** k)
-        n = (k + 1) * (-1)
-        one_hot = make_one_hot(switch_log[n])
-        if one_hot not in output_log:
-            output_log[one_hot] = [1, point]
-        else:
-            value = output_log[one_hot]
-            value[0] += 1
-            value[1] += point
-            output_log[one_hot] = [value[0], value[1]] 
+            point = switch_start * (alpha ** k)
+            n = (k + 1) * (-1)
+            one_hot = make_one_hot(switch_log[n])
+            if one_hot not in output_log:
+                output_log[one_hot] = [1, point]
+            else:
+                value = output_log[one_hot]
+                value[0] += 1
+                value[1] += point
+                output_log[one_hot] = [value[0], value[1]] 
 
     return output_log
 
@@ -348,7 +351,7 @@ def output_cut(output_log, border):
     output = {}
     for key, value in output_log.items():
         if value[0] >= border:
-        output[key] = value
+            output[key] = value
     return output
 
 
