@@ -357,7 +357,7 @@ def output_cut(output_log, border):
 
 
 def logToPickle(output, seed, alpha, match, border):
-    with open("output_seed{:03d}_alpha{1}_match{2}_border{3}.pkl".format(seed, alpha, match, border), 'wb') as tf:
+    with open("output_seed{:03d}_alpha{}_match{}_border{}.pkl".format(seed, alpha, match, border), 'wb') as tf:
         pickle.dump(output, tf)
     return
 
@@ -383,7 +383,7 @@ alpha = 0.99
 match = 5
 border = 2
 '''
-
+print("output_seed{:03d}_alpha{1}_match{2}_border{3}.pkl".format(seed, alpha, match, border))
 
 random.seed(seed)
 turns, reasons, logs = game_play(match)
