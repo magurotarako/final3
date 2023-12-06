@@ -357,7 +357,7 @@ def output_cut(output_log, border):
 
 
 def logToPickle(output, seed, alpha, match, border):
-    with open("output_seed{:03d}_alpha{}_match{}_border{}.pkl".format(seed, alpha, match, border), 'wb') as tf:
+    with open("output_seed{:04d}_alpha{}_match{}_border{}.pkl".format(seed, alpha, match, border), 'wb') as tf:
         pickle.dump(output, tf)
     return
 
