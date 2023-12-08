@@ -7,21 +7,21 @@ except ImportError:
     from yaml import Loader, Dumper
 
 
-#いくつoutputファイルを読み込むかとalpha値をコマンドライン引数で指定（python3 make_data.py number alpha match border fBorderの形で指定）
+#いくつoutputファイルを読み込むかとalpha値をコマンドライン引数で指定（python3 make_data.py number lastNumber alpha match border fBorderの形で指定）
 def get_params():
     number = int(sys.argv[1])
-    alpha = float(sys.argv[2])
-    match = int(sys.argv[3])
-    border = int(sys.argv[4])
-    fBorder = int(sys.argv[5])
-    return number, alpha, match, border, fBorder
+    lastNumber = int(sys.argv[2])
+    alpha = float(sys.argv[3])
+    match = int(sys.argv[4])
+    border = int(sys.argv[5])
+    fBorder = int(sys.argv[6])
+    return number, lastNumber, alpha, match, border, fBorder
 
-def get_outputs(number, alpha, match, border):
+def get_outputs(number, lastNumber, alpha, match, border):
     data = {}
-    for i in range(number):
-        #print(i)
-        #print("output_seed{:03d}_alpha{}_match{}_border{}.pkl".format(i + 1, alpha, match, border))
-        with open("output_seed{:04d}_alpha{}_match{}_border{}.pkl".format(i + 1, alpha, match, border), 'rb') as tf:
+    N = lastNumber - number + 1
+    for i in range(N):
+        with open("output_seed{:04d}_alpha{}_match{}_border{}.pkl".format(i + number, alpha, match, border), 'rb') as tf:
             output = pickle.load(tf)
             #print(output)
             for key, value in output.items():
@@ -43,10 +43,10 @@ def make_data(data, fBorder):
     return final_data
 
 
-number, alpha, match, border, fBorder = get_params()
-data = get_outputs(number, alpha, match, border)
+number, lastNumber, alpha, match, border, fBorder = get_params()
+data = get_outputs(number, lastNumber, alpha, match, border)
 final_data = make_data(data, fBorder)
 #print(final_data)
-with open("data_seed1to{:04d}_alpha{}_match{}_border{}_fBorder{}.pkl".format(number, alpha, match, border, fBorder), 'wb') as tf:
+with open("data_seed{:04d}to{:04d}_alpha{}_match{}_border{}_fBorder{}.pkl".format(number, lastNumber, alpha, match, border, fBorder), 'wb') as tf:
     pickle.dump(final_data, tf)
 
