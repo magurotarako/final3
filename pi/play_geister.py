@@ -91,31 +91,31 @@ def move(myghosts, board):
     for ghost in myghosts:
         i, j = ghost
         for k in range(4):
-        next_board = np.copy(board)
-        if k == 0:
-            can = move_up(ghost, myghosts, board)
-            if can == True:
-            next_board[i - 1][j] = next_board[i][j]
-            next_board[i][j] = 0
-            next_board_list.append(next_board)
-        elif k == 1:
-            can = move_down(ghost, myghosts)
-            if can == True:
-            next_board[i + 1][j] = next_board[i][j]
-            next_board[i][j] = 0
-            next_board_list.append(next_board)
-        elif k == 2:
-            can = move_left(ghost, myghosts)
-            if can == True:
-            next_board[i][j - 1] = next_board[i][j]
-            next_board[i][j] = 0
-            next_board_list.append(next_board)
-        else:
-            can = move_right(ghost, myghosts)
-            if can == True:
-                next_board[i][j + 1] = next_board[i][j]
+            next_board = np.copy(board)
+            if k == 0:
+                can = move_up(ghost, myghosts, board)
+                if can == True:
+                next_board[i - 1][j] = next_board[i][j]
                 next_board[i][j] = 0
                 next_board_list.append(next_board)
+            elif k == 1:
+                can = move_down(ghost, myghosts)
+                if can == True:
+                next_board[i + 1][j] = next_board[i][j]
+                next_board[i][j] = 0
+                next_board_list.append(next_board)
+            elif k == 2:
+                can = move_left(ghost, myghosts)
+                if can == True:
+                next_board[i][j - 1] = next_board[i][j]
+                next_board[i][j] = 0
+                next_board_list.append(next_board)
+            else:
+                can = move_right(ghost, myghosts)
+                if can == True:
+                    next_board[i][j + 1] = next_board[i][j]
+                    next_board[i][j] = 0
+                    next_board_list.append(next_board)
     return next_board_list
 
 def move_up(ghost, myghosts, board):
