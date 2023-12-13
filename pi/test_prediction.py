@@ -70,14 +70,27 @@ def make_one_hot(board):
                 one_hot[4 * (i * 6 + j) + 3] = 1
     return one_hot
 
-def main():
+def main(a):
     test_model = load_model()
     test_board = make_board()
     test_one_hot = make_one_hot(test_board)
-    prediction = test_model.predict(test_one_hot, verbose=0).transpose()[0]
-    #prediction = test_model.predict(test_one_hot)
-    #print(prediction)
+    if a == 1:
+        prediction = test_model.predict_on_batch(test_one_hot, verbose=0).transpose()[0]
+        print("/////////")
+        print(prediction)
+    elif a == 2:
+        prediction = test_model.predict_on_batch(test_one_hot).transpose()[0]
+        print("/////////")
+        print(prediction)
+    elif a == 3:
+        prediction = test_model.predict_on_batch(test_one_hot, verbose=0).transpose()
+        print("/////////")
+        print(prediction)
+    elif a == 4:
+        prediction = test_model.predict_on_batch(test_one_hot).transpose()
+        print("/////////")
+        print(prediction)
     return
 
-
-main()
+a = int(sys.argv[1])
+main(a)
