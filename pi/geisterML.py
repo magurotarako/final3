@@ -33,7 +33,7 @@ def create_model():
         keras.layers.Dense(32, activation='relu'),
         keras.layers.Dense(1, activation ='tanh')
     ])
-    model.compile(optimizer = 'adam', loss = 'cross_entropy', metrics = ['accuracy'])
+    model.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
     return model
 
 def load_model():
