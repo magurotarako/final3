@@ -72,18 +72,13 @@ def getAndSave_model(study, test):
     return
 
 
-def machineLearning(study, test):
-    getAndSave_model(study, test)
-    model = load_model()
-    return
 
 def main():
     study_data_name, test_data_name = get_file()
     study, test = get_data(study_data_name, test_data_name)
     getAndSave_model(study, test)
-    #machineLearning(study, test)
     return
 
-#main()
+main()
 
 
