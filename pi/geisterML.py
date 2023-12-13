@@ -29,8 +29,9 @@ def get_data(study_data_name, test_data_name):
 def create_model():
     model = keras.Sequential ([
         keras.layers.Dense(144),
+        keras.layers.Dense(64, activation='relu'),
         keras.layers.Dense(32, activation='relu'),
-        keras.layers.Dense(2, activation ='tanh')
+        keras.layers.Dense(1, activation ='tanh')
     ])
     model.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
     return model
