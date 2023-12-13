@@ -33,6 +33,12 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
+
+#python3 play_geister.py number matchの形で指定
+seed_number = int(sys.argv[1])
+match = int(sys.argv[2])
+random.seed(seed_number)
+
 gravity = 10
 
 def create_model():
