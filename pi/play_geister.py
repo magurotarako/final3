@@ -25,6 +25,9 @@ import re
 import pickle
 import yaml
 from yaml import load, dump
+import tensorflow as tf
+from tensorflow import keras
+from matplotlib import pyplot
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
@@ -331,7 +334,7 @@ def make_win_rate(mode, times, reason_list):
 #mode = random.randint(0, 1)
 #mode = 0 なら学習AIが先手、mode = 1 ならランダムAIが先手
 
-times = 10 #試合数
+times = int(sys.argv[1]) #試合数
 model = load_model()
 
 #"学習AIが先手の場合の勝率:"
