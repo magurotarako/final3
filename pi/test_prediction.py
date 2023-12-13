@@ -18,7 +18,7 @@ except ImportError:
 
 def make_board():
     board = []
-    board_1 = [1, 0, -2, , -2, 0]
+    board_1 = [1, 0, -2, 0, -2, 0]
     board_2 = [0, 0, 0, 0, -1, 0]
     board_3 = [1, 0, -1, -2, 1, 0]
     board_4 = [0, 0, 2, 0, -1, 0]
