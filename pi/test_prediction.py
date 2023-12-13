@@ -18,25 +18,19 @@ except ImportError:
 
 def make_board():
     board = []
-    a = [-1, -1, -1, -1, -2, -2, -2, -2]
-    random.shuffle(a)
-    b = [a[0], a[1], a[2], a[3]]
-    c = [a[4], a[5], a[6], a[7]]
-    board_1 = [0] + b + [0]
-    board_2 = [0] + c + [0]
-    board_3, board_4 = [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
-    d = [1, 1, 1, 1, 2, 2, 2, 2]
-    random.shuffle(d)
-    e = [d[0], d[1], d[2], d[3]]
-    f = [d[4], d[5], d[6], d[7]]
-    board_5 = [0] + e + [0]
-    board_6 = [0] + f + [0]
+    board_1 = [0, 1, 0, 0, -2, 0]
+    board_2 = [0, 0, 1, 0, -1, 0]
+    board_3 = [0, 2, 0, -2, 0, 0]
+    board_4 = [0, 0, -1, 0, 2, 0]
+    board_5 = [0, 0, 2, -2, 0, 0]
+    board_6 = [0, 1, 0, 0, 0, 0]
     board.append(board_1)
     board.append(board_2)
     board.append(board_3)
     board.append(board_4)
     board.append(board_5)
     board.append(board_6)
+    print(board)
     return np.array(board)
 
 def load_model():
@@ -68,6 +62,7 @@ def make_one_hot(board):
                 one_hot[4 * (i * 6 + j) + 2] = 1
             else:
                 one_hot[4 * (i * 6 + j) + 3] = 1
+    print(one_hot)
     return one_hot
 
 def main(a):
@@ -78,66 +73,10 @@ def main(a):
     test_test.append(test_one_hot)
     test_test_test = np.array(test_test)
     if a == 1:
-        prediction = test_model.predict_on_batch(test_test_test, verbose=0).transpose()[0]
-        print("/////////")
-        print(prediction)
-    elif a == 2:
-        prediction = test_model.predict_on_batch(test_test_test, verbose=0).transpose()
-        print("/////////")
-        print(prediction)
-    elif a == 3:
-        prediction = test_model.predict_on_batch(test_test_test, verbose=0)[0]
-        print("/////////")
-        print(prediction)
-    elif a == 4:
-        prediction = test_model.predict_on_batch(test_test_test, verbose=0)
-        print("/////////")
-        print(prediction)
-    elif a == 5:
-        prediction = test_model.predict_on_batch(test_test_test).transpose()[0]
-        print("/////////")
-        print(prediction)
-    elif a == 6:
-        prediction = test_model.predict_on_batch(test_test_test).transpose()
-        print("/////////")
-        print(prediction)
-    elif a == 7:
-        prediction = test_model.predict_on_batch(test_test_test)[0]
-        print("/////////")
-        print(prediction)
-    elif a == 8:
-        prediction = test_model.predict_on_batch(test_test_test)
-        print("/////////")
-        print(prediction)
-    if a == 9:
-        prediction = test_model.predict(test_test_test, verbose=0).transpose()[0]
-        print("/////////")
-        print(prediction)
-    elif a == 10:
-        prediction = test_model.predict(test_test_test, verbose=0).transpose()
-        print("/////////")
-        print(prediction)
-    elif a == 11:
-        prediction = test_model.predict(test_test_test, verbose=0)[0]
-        print("/////////")
-        print(prediction)
-    elif a == 12:
-        prediction = test_model.predict(test_test_test, verbose=0)
-        print("/////////")
-        print(prediction)
-    elif a == 13:
-        prediction = test_model.predict(test_test_test).transpose()[0]
-        print("/////////")
-        print(prediction)
-    elif a == 14:
-        prediction = test_model.predict(test_test_test).transpose()
-        print("/////////")
-        print(prediction)
-    elif a == 15:
         prediction = test_model.predict(test_test_test)[0]
         print("/////////")
         print(prediction)
-    elif a == 16:
+    elif a == 2:
         prediction = test_model.predict(test_test_test)
         print("/////////")
         print(prediction)    
