@@ -279,7 +279,7 @@ def game(times, mode, model):
 
                 #まだ結果が定まっていないため次の行動選択
                 next_board_list = make_my_next_board_list(board)
-                next_board = choice_board(next_board_list, turn, mode)
+                next_board = choice_board(next_board_list, turn, mode, model)
 
                 #行動選択後、盤面を見て決着がついたかを判断
                 if count_ghosts(next_board) == 1:
