@@ -1,17 +1,20 @@
+import random
+import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+from matplotlib import pyplot
 
 #コマンドライン引数としてファイル名を指定　(python3 geisterML.py data_seed{:04d}to{:04d}_alpha{}_match{}_border{}_fBorder{}.pkl data_seed{:04d}to{:04d}_alpha{}_match{}_border{}_fBorder{}.pkl)
 #前者が学習データ、後者がテストデータ
-data_name = sys.argv[1]
+study_data_name = sys.argv[1]
 test_data_name = sys.argv[2]
 
 def get_data():
-    with open('{}'.format(data_name), 'rb') as tf:
-        data = pickle.load(tf)
+    with open('{}'.format(study_data_name), 'rb') as tf:
+        study = pickle.load(tf)
     with open('{}'.format(test_data_name), 'rb') as tf:
-        test_data = pickle.load(tf)
-    return data, test_data
+        test = pickle.load(tf)
+    return study, test
 
 
 def create_model():
@@ -48,12 +51,27 @@ def get_onehot(data_dict):
 
 
 
-def machineLearning(data, test_data):
-    study_data, study_label = get_onehot(data)
-    test_data, test_label = get_onehot(test_data)
+def getAndSave_model(study, test):
+    study_data, study_label = get_onehot(study)
+    test_data, test_label = get_onehot(test)
+    model = create_model()
+    model.fit(study_data, study_label, epochs=5)
+    test_loss, test_acc = model.evaluate(test_data, test_label)
+    print(f"Test Loss = {test_loss}")
+    print(f"Test Accuracy = {test_acc}")
+    model.save_weights('modelA')
+    return
 
 
-data, test_data = get_data()
-machineLearning(data, test_data)
+def machineLearning(study, test):
+    getAndSave_model(study, test)
+    model = load_model()
+    return
+
+
+
+study, test = get_data()
+getAndSave_model(study, test)
+#machineLearning(study, test)
 
 
