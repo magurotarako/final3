@@ -1,3 +1,4 @@
+!pip3 install tensorflow
 import random
 import numpy as np
 import tensorflow as tf
