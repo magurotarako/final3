@@ -63,15 +63,34 @@ def make_one_hot(board):
     return one_hot
 
 def main():
+    times = 100
     test_model = load_model()
-    test_board = make_board()
-    test_one_hot = make_one_hot(test_board)
-    test_test = []
-    test_test.append(test_one_hot)
-    test_test_test = np.array(test_test)
-    prediction = test_model.predict(test_test_test)[0]
+    boards = []
+    predictions = []
+    for i in range(times):
+        test_board = make_board()
+        test_one_hot = make_one_hot(test_board)
+        test_test = []
+        test_test.append(test_one_hot)
+        test_test_test = np.array(test_test)
+        prediction = test_model.predict(test_test_test)[0]
+        boards.append(test_board)
+        predictions.append(prediction)
     print("/////////")
-    print(prediction)   
+    print("100回のpredictionsは")
+    print(predictions)
+    print("/////////")
+    max = max(predictions)
+    maxindex = predictions.index(max)
+    print("最大値とその盤面は")
+    print(max)
+    print(boards[maxindex])
+    print("/////////")
+    min = min(predictions)
+    minindex = predictions.index(min)
+    print("最小値とその盤面は")
+    print(min)
+    print(boards[minindex])
     return
 
 main()
