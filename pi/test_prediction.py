@@ -17,26 +17,17 @@ except ImportError:
 
 
 def make_board():
-    board = []
-    board_1 = [1, 0, -2, 0, -2, 0]
-    board_2 = [0, 0, 0, 0, -1, 0]
-    board_3 = [1, 0, -1, -2, 1, 0]
-    board_4 = [0, 0, 2, 0, -1, 0]
-    board_5 = [0, 0, 0, 2, 0, 0]
-    board_6 = [0, 0, 0, 0, 0, 0]
-    board.append(board_1)
-    board.append(board_2)
-    board.append(board_3)
-    board.append(board_4)
-    board.append(board_5)
-    board.append(board_6)
-    print(board_1)
-    print(board_2)
-    print(board_3)
-    print(board_4)
-    print(board_5)
-    print(board_6)
-    return board
+    x_1 = random.randint(1, 4)
+    x_2 = random.randint(1, 4)
+    x_3 = random.randint(1, 4)
+    x_4 = random.randint(1, 4)
+    x_5 = 36 - (x_1 + x_2 + x_3 + x_4)
+    board = [-2] * x_1 + [-1] * x_2 + [1] * x_3 + [2] * x_4 + [0] * x_5
+    random.shuffle(board)
+    board_n = np.array(board)
+    board_x = board_n.reshape([6, 6])
+    print(board_x)
+    return board_x
 
 def load_model():
     model = create_model()
