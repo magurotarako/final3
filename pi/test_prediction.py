@@ -18,12 +18,12 @@ except ImportError:
 
 def make_board():
     board = []
-    board_1 = [0, 0, 0, 0, -2, 0]
-    board_2 = [0, 0, 0, 0, 0, 0]
-    board_3 = [0, 2, 0, -2, 0, 0]
+    board_1 = [0, -2, -2, -2, -2, 0]
+    board_2 = [0, -1, -1, -1, -1, 0]
+    board_3 = [0, 0, 0, 0, 0, 0]
     board_4 = [0, 0, 0, 0, 0, 0]
-    board_5 = [-1, 0, 2, -2, 0, 0]
-    board_6 = [0, 1, 0, 1, 0, -1]
+    board_5 = [0, 2, 2, 2, 2, 0]
+    board_6 = [0, 1, 1, 1, 1, 0]
     board.append(board_1)
     board.append(board_2)
     board.append(board_3)
