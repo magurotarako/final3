@@ -74,8 +74,8 @@ def main():
     test_model = load_model()
     test_board = make_board()
     test_one_hot = make_one_hot(test_board)
-    #prediction = test_model.predict(test_one_hot, verbose=0).transpose()[0]
-    prediction = test_model.predict(test_one_hot)
+    prediction = test_model.predict(test_one_hot, verbose=0).transpose()[0]
+    #prediction = test_model.predict(test_one_hot)
     print(prediction)
     return
 
