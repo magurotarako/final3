@@ -6,11 +6,15 @@ import sys
 import re
 import pickle
 import yaml
+import tensorflow as tf
+from tensorflow import keras
+from matplotlib import pyplot
 from yaml import load, dump
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
+
 
 def make_board():
     board = []
