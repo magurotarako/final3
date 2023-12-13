@@ -26,7 +26,6 @@ def make_board():
     random.shuffle(board)
     board_n = np.array(board)
     board_x = board_n.reshape([6, 6])
-    print(board_x)
     return board_x
 
 def load_model():
@@ -73,11 +72,11 @@ def main():
         test_test = []
         test_test.append(test_one_hot)
         test_test_test = np.array(test_test)
-        prediction = test_model.predict(test_test_test)[0]
+        prediction = test_model.predict(test_test_test)[0][0]
         boards.append(test_board)
         predictions.append(prediction)
     print("/////////")
-    print("100回のpredictionsは")
+    print("予測値は")
     print(predictions)
     print("/////////")
     max = max(predictions)
