@@ -18,19 +18,24 @@ except ImportError:
 
 def make_board():
     board = []
-    board_1 = [0, -2, -2, -2, -2, 0]
-    board_2 = [0, -1, -1, -1, -1, 0]
-    board_3 = [0, 0, 0, 0, 0, 0]
-    board_4 = [0, 0, 0, 0, 0, 0]
-    board_5 = [0, 2, 2, 2, 2, 0]
-    board_6 = [0, 1, 1, 1, 1, 0]
+    board_1 = [1, 0, -2, , -2, 0]
+    board_2 = [0, 0, 0, 0, -1, 0]
+    board_3 = [1, 0, -1, -2, 1, 0]
+    board_4 = [0, 0, 2, 0, -1, 0]
+    board_5 = [0, 0, 0, 2, 0, 0]
+    board_6 = [0, 0, 0, 0, 0, 0]
     board.append(board_1)
     board.append(board_2)
     board.append(board_3)
     board.append(board_4)
     board.append(board_5)
     board.append(board_6)
-    print(board)
+    print(board_1)
+    print(board_2)
+    print(board_3)
+    print(board_4)
+    print(board_5)
+    print(board_6)
     return board
 
 def load_model():
@@ -73,7 +78,7 @@ def main():
     test_test = []
     test_test.append(test_one_hot)
     test_test_test = np.array(test_test)
-    prediction = test_model.predict(test_test_test)
+    prediction = test_model.predict(test_test_test)[0]
     print("/////////")
     print(prediction)   
     return
