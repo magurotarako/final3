@@ -41,10 +41,11 @@ def load_model():
 def create_model():
     model = keras.Sequential ([
         keras.layers.Dense(144),
+        keras.layers.Dense(64, activation='relu'),
         keras.layers.Dense(32, activation='relu'),
         keras.layers.Dense(1, activation ='tanh')
     ])
-    model.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
+    model.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
     return model
 
 def make_one_hot(board):
@@ -72,7 +73,7 @@ def main():
     test_test = []
     test_test.append(test_one_hot)
     test_test_test = np.array(test_test)
-    prediction = test_model.predict(test_test_test)[0]
+    prediction = test_model.predict(test_test_test)
     print("/////////")
     print(prediction)   
     return
