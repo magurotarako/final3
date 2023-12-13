@@ -62,7 +62,7 @@ def make_one_hot(board):
     return one_hot
 
 def main():
-    times = 100
+    times = 1000
     test_model = load_model()
     boards = []
     predictions = []
