@@ -29,6 +29,7 @@ try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
+import geisterML
 
 
 
@@ -154,21 +155,22 @@ def move_right(ghost, myghosts):
         can = True
     return can
 
+#敵の情報を隠し、one-hot vector表現にする
 def make_one_hot(board):
     #print(board)
-    one_hot = ""
+    one_hot = np.zeros(144)
     for i in range(6):
         for j in range(6):
             if board[i][j] == -2:
-                one_hot += "10000"
+                one_hot[4 * (i * 6 + j)] = 1
             elif board[i][j] == -1:
-                one_hot += "01000"
+                one_hot[4 * (i * 6 + j)] = 1
             elif board[i][j] == 0:
-                one_hot += "00100"
+                one_hot[4 * (i * 6 + j) + 1] = 1
             elif board[i][j] == 1:
-                one_hot += "00010"
+                one_hot[4 * (i * 6 + j) + 2] = 1
             else:
-                one_hot += "00001"
+                one_hot[4 * (i * 6 + j) + 3] = 1
     return one_hot
 
 #盤面をひっくり返す
@@ -193,7 +195,7 @@ def count_ghosts(board):
         return 0
 
 #学習AIの行動
-def next_choice_ai(next_board_list):
+def next_choice_ai(next_board_list, model):
     evaluate_list = []
     for board in next_board_list:
         #次の候補盤面を全てone-hot vector表現にする
@@ -210,10 +212,10 @@ def next_choice_ai(next_board_list):
     return next_board
 
 
-def choice_board(next_board_list, turn, mode):
+def choice_board(next_board_list, turn, mode, model):
     if (turn % 2 == 1 and mode == 0) or (turn % 2 == 0 and mode == 1):
         #この場合、学習AIの行動ターン
-        next_board = next_choice_ai(next_board_list)
+        next_board = next_choice_ai(next_board_list, model)
     else:
         #この場合、ランダムAIの行動ターン
         L = len(next_board_list)
@@ -222,7 +224,8 @@ def choice_board(next_board_list, turn, mode):
     return next_board
 
 
-def game(times, mode):
+
+def game(times, mode, model):
     turn_list, reason_list, log_list = [], [], []
     for _ in range(times):
         log = []
@@ -242,7 +245,7 @@ def game(times, mode):
         
                 #まだ結果が定まっていないため次の行動選択
                 next_board_list = make_my_next_board_list(board)
-                next_board = choice_board(next_board_list, turn, mode)
+                next_board = choice_board(next_board_list, turn, mode, model)
                 log.append(next_board)
 
                 #行動選択後、盤面を見て決着がついたかを判断
@@ -333,16 +336,17 @@ def make_win_rate(mode, times, reason_list):
 #mode = 0 なら学習AIが先手、mode = 1 ならランダムAIが先手
 
 times = 10000 #試合数
+model = geisterML.load_model()
 
 #"学習AIが先手の場合の勝率:"
 mode = 0
-turn_list, reason_list, log_list = game(times, mode)
+_, reason_list, _ = game(times, mode, model)
 win_rate = make_win_rate(mode, times, reason_list)
 print(win_rate)
 
 #"学習AIが後手の場合の勝率:"
 mode = 1
-turn_list, reason_list, log_list = game(times, mode)
+_, reason_list, _ = game(times, mode, model)
 win_rate = make_win_rate(mode, times, reason_list)
 print(win_rate)
 
