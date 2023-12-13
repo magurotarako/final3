@@ -1,9 +1,15 @@
 import random
 import numpy as np
+import pickle
 import sys
 import tensorflow as tf
 from tensorflow import keras
 from matplotlib import pyplot
+from yaml import load, dump
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 #コマンドライン引数としてファイル名を指定　(python3 geisterML.py data_seed{:04d}to{:04d}_alpha{}_match{}_border{}_fBorder{}.pkl data_seed{:04d}to{:04d}_alpha{}_match{}_border{}_fBorder{}.pkl)
 #前者が学習データ、後者がテストデータ
