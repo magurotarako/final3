@@ -65,7 +65,7 @@ def getAndSave_model(study, test):
     study_data, study_label = get_onehot(study)
     test_data, test_label = get_onehot(test)
     model = create_model()
-    model.fit(study_data, study_label, epochs=5)
+    model.fit(study_data, study_label, epochs=1000)
     test_loss, test_acc = model.evaluate(test_data, test_label)
     print(f"Test Loss = {test_loss}")
     print(f"Test Accuracy = {test_acc}")
