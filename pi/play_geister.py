@@ -29,9 +29,23 @@ try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
-import geisterML
 
 gravity = 10
+
+def create_model():
+    model = keras.Sequential ([
+        keras.layers.Dense(144),
+        keras.layers.Dense(64, activation='relu'),
+        keras.layers.Dense(32, activation='relu'),
+        keras.layers.Dense(1, activation ='tanh')
+    ])
+    model.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
+    return model
+
+def load_model():
+    model = create_model()
+    model.load_weights('modelA').expect_partial()
+    return model
 
 
 def make_board():
@@ -177,17 +191,17 @@ def count_ghosts(board):
 
 #学習AIの行動
 def next_choice_ai(next_board_list, model):
-    evaluate_list = []
+    predictions = []
     for board in next_board_list:
         #次の候補盤面を全てone-hot vector表現にする
         one_hot = make_one_hot(board)
-        #データ内にあればその評価値を、無ければデータにある全盤面の評価値の平均で代用
-        if one_hot in data:
-            evaluate_list.append(data[one_hot])
-        else:
-            evaluate_list.append(average)
-    evaluate_array = np.array(evaluate_list)
+        input_board = []
+        input_board.append(one_hot)
+        input_one_hot = np.array(input_board)
+        prediction = model.predict(input_one_hot)[0][0]
+        predictions.append(prediction)
     #weightsを重みとして1つ値を選んでくる(random.choices()を使うと、重みでk回選び、長さkのリストとして出るのでk=1かつ[0]が必要)
+    evaluate_array = np.array(predictions)
     exp_weights = np.exp(evaluate_array * gravity)
     next_board = random.choices(next_board_list, k = 1, weights = exp_weights)[0]
     return next_board
@@ -313,11 +327,12 @@ def make_win_rate(mode, times, reason_list):
 
 
 
+
 #mode = random.randint(0, 1)
 #mode = 0 なら学習AIが先手、mode = 1 ならランダムAIが先手
 
-times = 10000 #試合数
-model = geisterML.load_model()
+times = 10 #試合数
+model = load_model()
 
 #"学習AIが先手の場合の勝率:"
 mode = 0
