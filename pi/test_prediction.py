@@ -74,22 +74,73 @@ def main(a):
     test_model = load_model()
     test_board = make_board()
     test_one_hot = make_one_hot(test_board)
+    test_test = []
+    test_test.append(test_one_hot)
+    test_test_test = np.array(test_test)
     if a == 1:
-        prediction = test_model.predict_on_batch(test_one_hot, verbose=0).transpose()[0]
+        prediction = test_model.predict_on_batch(test_test_test, verbose=0).transpose()[0]
         print("/////////")
         print(prediction)
     elif a == 2:
-        prediction = test_model.predict_on_batch(test_one_hot).transpose()[0]
+        prediction = test_model.predict_on_batch(test_test_test, verbose=0).transpose()
         print("/////////")
         print(prediction)
     elif a == 3:
-        prediction = test_model.predict_on_batch(test_one_hot, verbose=0).transpose()
+        prediction = test_model.predict_on_batch(test_test_test, verbose=0)[0]
         print("/////////")
         print(prediction)
     elif a == 4:
-        prediction = test_model.predict_on_batch(test_one_hot).transpose()
+        prediction = test_model.predict_on_batch(test_test_test, verbose=0)
         print("/////////")
         print(prediction)
+    elif a == 5:
+        prediction = test_model.predict_on_batch(test_test_test).transpose()[0]
+        print("/////////")
+        print(prediction)
+    elif a == 6:
+        prediction = test_model.predict_on_batch(test_test_test).transpose()
+        print("/////////")
+        print(prediction)
+    elif a == 7:
+        prediction = test_model.predict_on_batch(test_test_test)[0]
+        print("/////////")
+        print(prediction)
+    elif a == 8:
+        prediction = test_model.predict_on_batch(test_test_test)
+        print("/////////")
+        print(prediction)
+    if a == 9:
+        prediction = test_model.predict(test_test_test, verbose=0).transpose()[0]
+        print("/////////")
+        print(prediction)
+    elif a == 10:
+        prediction = test_model.predict(test_test_test, verbose=0).transpose()
+        print("/////////")
+        print(prediction)
+    elif a == 11:
+        prediction = test_model.predict(test_test_test, verbose=0)[0]
+        print("/////////")
+        print(prediction)
+    elif a == 12:
+        prediction = test_model.predict(test_test_test, verbose=0)
+        print("/////////")
+        print(prediction)
+    elif a == 13:
+        prediction = test_model.predict(test_test_test).transpose()[0]
+        print("/////////")
+        print(prediction)
+    elif a == 14:
+        prediction = test_model.predict(test_test_test).transpose()
+        print("/////////")
+        print(prediction)
+    elif a == 15:
+        prediction = test_model.predict(test_test_test)[0]
+        print("/////////")
+        print(prediction)
+    elif a == 16:
+        prediction = test_model.predict(test_test_test)
+        print("/////////")
+        print(prediction)    
     return
 
 a = int(sys.argv[1])
