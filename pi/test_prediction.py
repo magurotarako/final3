@@ -58,7 +58,7 @@ def make_one_hot(board):
                 one_hot[4 * (i * 6 + j) + 2] = 1
             else:
                 one_hot[4 * (i * 6 + j) + 3] = 1
-    print(one_hot)
+    #print(one_hot)
     return one_hot
 
 def main():
@@ -76,18 +76,18 @@ def main():
         boards.append(test_board)
         predictions.append(prediction)
     print("/////////")
-    print("予測値は")
+    #print("予測値は")
     print(predictions)
     print("/////////")
     max = max(predictions)
     maxindex = predictions.index(max)
-    print("最大値とその盤面は")
+    #print("最大値とその盤面は")
     print(max)
     print(boards[maxindex])
     print("/////////")
     min = min(predictions)
     minindex = predictions.index(min)
-    print("最小値とその盤面は")
+    #print("最小値とその盤面は")
     print(min)
     print(boards[minindex])
     return
