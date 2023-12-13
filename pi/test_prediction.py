@@ -11,7 +11,6 @@ try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
     from yaml import Loader, Dumper
-import geisterML
 
 def make_board():
     board = []
@@ -35,6 +34,20 @@ def make_board():
     board.append(board_5)
     board.append(board_6)
     return np.array(board)
+
+def load_model():
+    model = create_model()
+    model.load_weights('modelA').expect_partial()
+    return model
+
+def create_model():
+    model = keras.Sequential ([
+        keras.layers.Dense(144),
+        keras.layers.Dense(32, activation='relu'),
+        keras.layers.Dense(2, activation ='tanh')
+    ])
+    model.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics = ['accuracy'])
+    return model
 
 def make_one_hot(board):
     #print(board)

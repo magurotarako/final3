@@ -31,26 +31,7 @@ except ImportError:
     from yaml import Loader, Dumper
 import geisterML
 
-
-
-
-
-#python3 play_guister.py data_seed1to{0}_alpha{1}_match{2}_border{3}_fBorder{4}.pklの形で実行
-def load_data_and_average():
-    #data_seed1to{0}_alpha{1}_match{2}_border{3}_fBorder{4}.pklが辞書データ
-    data_file_name = sys.argv[1]
-    with open("{0}".format(data_file_name), 'rb') as tf:
-        data = pickle.load(tf) 
-        if len(data) == 0:
-            print("データが一つも残っていません")
-            average = 0
-        else:
-            average = mean(data.values())
-    return data, average
-
-
 gravity = 10
-data, average = load_data_and_average()
 
 
 def make_board():

@@ -13,10 +13,12 @@ except ImportError:
 
 #コマンドライン引数としてファイル名を指定　(python3 geisterML.py data_seed{:04d}to{:04d}_alpha{}_match{}_border{}_fBorder{}.pkl data_seed{:04d}to{:04d}_alpha{}_match{}_border{}_fBorder{}.pkl)
 #前者が学習データ、後者がテストデータ
-study_data_name = sys.argv[1]
-test_data_name = sys.argv[2]
+def get_file():
+    study_data_name = sys.argv[1]
+    test_data_name = sys.argv[2]
+    return study_data_name, test_data_name
 
-def get_data():
+def get_data(study_data_name, test_data_name):
     with open('{}'.format(study_data_name), 'rb') as tf:
         study = pickle.load(tf)
     with open('{}'.format(test_data_name), 'rb') as tf:
@@ -75,10 +77,13 @@ def machineLearning(study, test):
     model = load_model()
     return
 
+def main():
+    study_data_name, test_data_name = get_file()
+    study, test = get_data(study_data_name, test_data_name)
+    getAndSave_model(study, test)
+    #machineLearning(study, test)
+    return
 
-
-study, test = get_data()
-getAndSave_model(study, test)
-#machineLearning(study, test)
+#main()
 
 
