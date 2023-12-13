@@ -24,7 +24,9 @@ def get_data(data_name):
 def main():
     data_name = get_file()
     data = get_data(data_name)
-    print(data)
+    print(max(list(data.values())))
+    print(min(list(data.values())))
+    #print(data)
     return
 
 main()
