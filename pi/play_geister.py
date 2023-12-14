@@ -340,19 +340,19 @@ def make_win_rate(mode, times, reason_list):
 #mode = random.randint(0, 1)
 #mode = 0 なら学習AIが先手、mode = 1 ならランダムAIが先手
 
-times = int(sys.argv[1]) #試合数
+
 model = load_model()
 
 #"学習AIが先手の場合の勝率:"
 mode = 0
-_, reason_list, _ = game(times, mode, model)
-win_rate = make_win_rate(mode, times, reason_list)
+_, reason_list, _ = game(match, mode, model)
+win_rate = make_win_rate(mode, match, reason_list)
 print(win_rate)
 
 #"学習AIが後手の場合の勝率:"
 mode = 1
-_, reason_list, _ = game(times, mode, model)
-win_rate = make_win_rate(mode, times, reason_list)
+_, reason_list, _ = game(match, mode, model)
+win_rate = make_win_rate(mode, match, reason_list)
 print(win_rate)
 
 
