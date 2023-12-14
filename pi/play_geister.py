@@ -37,7 +37,11 @@ except ImportError:
 #python3 play_geister.py number matchの形で指定
 seed_number = int(sys.argv[1])
 match = int(sys.argv[2])
+
+#init_default = 0 初期盤面ランダム
+init_default = 1 #初期盤面固定
 random.seed(seed_number)
+
 
 gravity = 10
 
@@ -233,7 +237,14 @@ def game(times, mode, model):
     turn_list, reason_list, log_list = [], [], []
     for _ in range(times):
         log = []
+
+
         board = make_board()
+
+        #初期盤面を固定する場合はこっち
+        if init_default == 1:
+            board = default_board()
+
         log.append(board)
         turn = 1
         while True:
@@ -334,6 +345,20 @@ def make_win_rate(mode, times, reason_list):
         win_rate = l_win / times
     return win_rate
 
+def default_board():
+    board = []
+    board_1 = [0, -2, -2, -2, -2, 0]
+    board_2 = [0, -1, -1, -1, -1, 0]
+    board_3, board_4 = [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+    board_5 = [0, 1, 1, 1, 1, 0]
+    board_6 = [0, 2, 2, 2, 2, 0]
+    board.append(board_1)
+    board.append(board_2)
+    board.append(board_3)
+    board.append(board_4)
+    board.append(board_5)
+    board.append(board_6)
+    return np.array(board)
 
 
 
