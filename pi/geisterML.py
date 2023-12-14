@@ -80,6 +80,19 @@ def main():
     getAndSave_model(study, test)
     return
 
-main()
+def test():
+    study_data_name, test_data_name = get_file()
+    study, test = get_data(study_data_name, test_data_name)
+    study_data, study_label = get_onehot(study)
+    test_data, test_label = get_onehot(test)
+    model = create_model()
+    model.load_weights('modelA')
+    result = model(test_data)
+    for i in range(10):
+        print(f"{test_label[i]} {result[i]}")
+
+test()
+
+#main()
 
 
