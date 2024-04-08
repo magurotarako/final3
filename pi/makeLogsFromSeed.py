@@ -11,9 +11,12 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
+#先手・後手の試合をmatch数ごとに行うため、結果はmatch数の2倍になる
 
-#コマンドライン引数としてファイル名を指定　(python3 makeLogsFromSeed.py seed{0}_alpha{1}_match{2}_border{3}.yml)
+#コマンドライン引数としてファイル名を指定　(python3 makeLogsFromSeed.py seed{0}_alpha{1}_match{2}_border{3}.yml model_1 model_2)
 yml_name = sys.argv[1]
+model_1_name = sys.argv[2]
+model_2_name = sys.argv[3]
 
 #コマンドライン引数として指定したファイル名からseed値、alpha値、match値（１並列当たりの試合数）、border値（閾値）を取得
 with open('{0}'.format(yml_name)) as file:
@@ -22,6 +25,23 @@ with open('{0}'.format(yml_name)) as file:
     alpha = params['alpha']
     match = params['match']
     border = params['border']
+
+def create_model():
+    model = keras.Sequential ([
+        keras.layers.Dense(154),
+        keras.layers.Dense(64, activation='relu'),
+        keras.layers.Dense(32, activation='relu'),
+        keras.layers.Dense(1, activation ='linear')
+    ])
+    loss_fomula = tf.keras.losses.MeanSquaredError()
+    model.compile(optimizer = 'adam', loss = loss_fomula, metrics = ['accuracy'])
+    return model
+
+def load_model(model_name):
+    model = create_model()
+    model.load_weights(model_name).expect_partial()
+    return model
+
 
 
 
@@ -61,8 +81,8 @@ def count_ghosts(board):
 
 def make_my_next_board_list(board):
     myghosts = find_myghosts(board)
-    next_board_list, arrow_list = move(myghosts, board)
-    return next_board_list, arrow_list
+    next_board_list = move(myghosts, board)
+    return next_board_list
 
 
 def find_myghosts(board):
@@ -74,42 +94,38 @@ def find_myghosts(board):
     return myghosts
 
 def move(myghosts, board):
-    next_board_list, arrow_list = [], []
+    next_board_list = []
     for ghost in myghosts:
         i, j = ghost
         for k in range(4):
             next_board = np.copy(board)
             if k == 0:
-                can = move_up(ghost, myghosts, board)
+                can = move_up(ghost, myghosts)
                 if can == True:
                     next_board[i - 1][j] = next_board[i][j]
                     next_board[i][j] = 0
-                    arrow_list.append([i, j, i - 1, j])
                     next_board_list.append(next_board)
             elif k == 1:
                 can = move_down(ghost, myghosts)
                 if can == True:
                     next_board[i + 1][j] = next_board[i][j]
                     next_board[i][j] = 0
-                    arrow_list.append([i, j, i + 1, j])
                     next_board_list.append(next_board)
             elif k == 2:
                 can = move_left(ghost, myghosts)
                 if can == True:
                     next_board[i][j - 1] = next_board[i][j]
                     next_board[i][j] = 0
-                    arrow_list.append([i, j, i, j - 1])
                     next_board_list.append(next_board)
             else:
                 can = move_right(ghost, myghosts)
                 if can == True:
                     next_board[i][j + 1] = next_board[i][j]
                     next_board[i][j] = 0
-                    arrow_list.append([i, j, i, j + 1])
                     next_board_list.append(next_board)
-    return next_board_list, arrow_list
+    return next_board_list
 
-def move_up(ghost, myghosts, board):
+def move_up(ghost, myghosts):
     i, j = ghost
     if i == 0 or [i - 1, j] in myghosts:
         can = False
@@ -142,10 +158,30 @@ def move_right(ghost, myghosts):
     return can
 
 
-def choice_board(next_board_list, arrow_list):
-    L = len(next_board_list)
-    choice = random.randint(0, L - 1)
-    return next_board_list[choice], arrow_list[choice]
+
+#AIの行動
+def choice_board(next_board_list, model):
+    if model == 'random':
+        #この場合、ランダムAIの行動ターン
+        L = len(next_board_list)
+        choice = random.randint(0, L - 1)
+        next_board = next_board_list[choice]
+        return next_board
+
+    predictions = []
+    for board in next_board_list:
+        #次の候補盤面を全てone-hot vector表現にする
+        one_hot = make_one_hot(board)
+        input_board = []
+        input_board.append(one_hot)
+        input_one_hot = np.array(input_board)
+        prediction = model.predict(input_one_hot)[0][0]
+        predictions.append(prediction)
+    #weightsを重みとして1つ値を選んでくる(random.choices()を使うと、重みでk回選び、長さkのリストとして出るのでk=1かつ[0]が必要)
+    evaluate_array = np.array(predictions)
+    exp_weights = np.exp(evaluate_array * gravity)
+    next_board = random.choices(next_board_list, k = 1, weights = exp_weights)[0]
+    return next_board
 
 
 def turn_switch(next_board):
@@ -156,22 +192,27 @@ def turn_switch(next_board):
     change_board *= -1
     return change_board
 
-def reverse_arrow(arrow):
-    a, b, c, d = arrow
-    return [5 - a, 5 - b, 5 - c, 5 - d]
 
 
 
-def game_play(times):
+def game_play(times, model_1_name, model_2_name):
+    if model_1_name != 'random':
+        model_1 = load_model(model_1_name)
+    else:
+        model_1 = 'random'
+    if model_2_name != random:
+        model_2 = load_model(model_2_name)
+    else:
+        model_2 = 'random'
+
     turn_list, reason_list, log_list = [], [], []
     for _ in range(times):
         log = []
         board = make_board()
-        #make_png(board, 0, 0, [])
         log.append(board)
         turn = 1
         while True:
-            if turn % 2 == 1: #自分のターン
+            if turn % 2 == 1: #先手のターン
                 if board[0][0] == 1:
                     #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で勝ち）
                     #board[0][0] = 0
@@ -191,8 +232,8 @@ def game_play(times):
                     log_list.append(log)
                     break
 
-                next_board_list, arrow_list = make_my_next_board_list(board)
-                next_board, arrow = choice_board(next_board_list, arrow_list)
+                next_board_list = make_my_next_board_list(board)
+                next_board = choice_board(next_board_list, model_1)
                 log.append(next_board)
                 if count_ghosts(next_board) == 1:
                     #この時点でのnext_board = 決着ボード（「自分のターン終了時にこの盤面」で勝ち）
@@ -214,8 +255,8 @@ def game_play(times):
                     #make_png(next_board, 0, turn, arrow)
                     board = turn_switch(next_board)
                     turn += 1
-                    
-            else: #相手のターン
+
+            else: #後手のターン
                 if board[0][0] == 1:
                     board = turn_switch(board)
                     #この時点でのboard = 決着ボード（「自分のターン終了時にこの盤面」で負け）
@@ -237,8 +278,8 @@ def game_play(times):
                     log_list.append(log)
                     break
 
-                next_board_list, arrow_list = make_my_next_board_list(board)
-                next_board, arrow = choice_board(next_board_list, arrow_list)
+                next_board_list = make_my_next_board_list(board)
+                next_board = choice_board(next_board_list, model_2)
                 if count_ghosts(next_board) == 1:
                     board = turn_switch(next_board)
                     #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で負け）
@@ -254,7 +295,6 @@ def game_play(times):
                     board = turn_switch(next_board)
                     #この時点でのboard = 決着ボード（「相手のターン終了時にこの盤面」で勝ち）
                     log.append(board)
-                    #arrow = reverse_arrow(arrow)
                     reason = 5
                     #make_png(board, reason, turn, arrow)
                     turn_list.append(turn)
@@ -264,14 +304,44 @@ def game_play(times):
                 else:
                     board = turn_switch(next_board)
                     log.append(board)
-                    #arrow = reverse_arrow(arrow)
                     #make_png(board, 0, turn, arrow)
                     turn += 1
     return turn_list, reason_list, log_list
 
+def enemy_count(board):
+    blue = np.count_nonzero(board == -1)
+    red = np.count_nonzero(board == -2)
+    return blue, red
+
+def add_one_hot(blue, red):
+    if blue == 0:
+        add_1 = "10000"
+    elif blue == 1:
+        add_1 = "01000"
+    elif blue == 2:
+        add_1 = "00100"
+    elif blue == 3:
+        add_1 = "00010"
+    elif blue == 4:
+        add_1 = "00001"
+
+    if red == 0:
+        add_2 = "10000"
+    elif red == 1:
+        add_2 = "01000"
+    elif red == 2:
+        add_2 = "00100"
+    elif red == 3:
+        add_2 = "00010"
+    elif red == 4:
+        add_2 = "00001"
+    add = add_1 + add_2
+    return add
 
 def make_one_hot(board):
     one_hot = ""
+    blue, red = enemy_count(board)
+    add = add_one_hot(blue, red)
     for i in range(6):
         for j in range(6):
             #-2と-1はどちらもわからない扱い。つまり「-1＆-2」,「0」,「1」,「2」の4種類（4桁）
@@ -285,6 +355,7 @@ def make_one_hot(board):
                 one_hot += "0010"
             else:
                 one_hot += "0001"
+    one_hot += add
     return one_hot
 
 
@@ -307,17 +378,17 @@ def make_output(turns, reasons, logs, alpha, match):
         #後手視点
         switch_log = make_switch_log(log)
 
-        if reason % 2 == 1: 
+        if reason % 2 == 1:
             #奇数なら先手が勝ち≒最後の盤面は先手にとって良い盤面（評価値1）
             start = 1
             #最後の盤面は後手にとって悪い盤面（評価値-1）
             switch_start = -1
-        else: 
+        else:
             #偶数なら後手が勝ち≒最後の盤面は先手にとって悪い盤面（評価値-1）
             start = -1
             #最後の盤面は後手にとって良い盤面（評価値1）
             switch_start = 1
-        
+
         #先手視点でoutput作成
         for j in range(turn + 1):
             point = start * (alpha ** j)
@@ -342,7 +413,7 @@ def make_output(turns, reasons, logs, alpha, match):
                 value = output_log[one_hot]
                 value[0] += 1
                 value[1] += point
-                output_log[one_hot] = [value[0], value[1]] 
+                output_log[one_hot] = [value[0], value[1]]
 
     return output_log
 
@@ -357,7 +428,7 @@ def output_cut(output_log, border):
 
 
 def logToPickle(output, seed, alpha, match, border):
-    with open("output_seed{:04d}_alpha{}_match{}_border{}.pkl".format(seed, alpha, match, border), 'wb') as tf:
+    with open("v3_output_seed{:04d}_alpha{}_match{}_border{}.pkl".format(seed, alpha, match, border), 'wb') as tf:
         pickle.dump(output, tf)
     return
 
@@ -385,15 +456,20 @@ border = 2
 '''
 
 random.seed(seed)
-turns, reasons, logs = game_play(match)
+turns_1, reasons_1, logs_1 = game_play(match, model_1_name, model_2_name)
+turns_2, reasons_2, logs_2 = game_play(match, model_2_name, model_1_name)
+turns = turns_1 + turns_2
+reasons = reasons_1 + reasons_2
+logs = logs_1 + logs_2
+match_2 = match * 2
 #print(turns)
 #print(reasons)
-output_log = make_output(turns, reasons, logs, alpha, match)
+output_log = make_output(turns, reasons, logs, alpha, match_2)
 #print(output_log)
 #print("/////////////////")
 output = output_cut(output_log, border)
 #print(output)
-logToPickle(output, seed, alpha, match, border)
+logToPickle(output, seed, alpha, match_2, border)
 
 
 
